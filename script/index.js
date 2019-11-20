@@ -36,19 +36,29 @@ GROUP BY ?place ?placeName ?type ?imageLink ?lat ?long
  // geoPath zet data om naar een svg-string
  const geoPath = d3.geoPath;
  // geoEquirectangular is een projectie
- const geoConicEqualArea = d3.geoConicEqualArea;
- const geoNaturalEarth1 = d3.geoNaturalEarth1;
- const geoOrthographic = d3.geoOrthographic;
- const projection = geoOrthographic(); //geoNaturalEarth1()
- // zet de svg-string om naar de projectie
- const pathGenerator = geoPath().projection(projection);
- // svg centreren. Bron: https://bl.ocks.org/mbostock/4136647
+
  const width = 900;
  const height = 500;
  const svg = d3.select('svg')
    .attr("viewBox", "0 0 " + width + " " + height)
+
+ const geoConicEqualArea = d3.geoConicEqualArea;
+ const geoNaturalEarth1 = d3.geoNaturalEarth1;
+ const geoOrthographic = d3.geoOrthographic;
+ const projection = geoNaturalEarth1();
+ const zoom = d3.zoom;
+ const event = d3.event;
+ const select = d3.select;
+ const g = svg.append('g');
+ //geoNaturalEarth1()
+ // zet de svg-string om naar de projectie
+
+ const pathGenerator = geoPath().projection(projection);
+ // svg centreren. Bron: https://bl.ocks.org/mbostock/4136647
  const circleDelay = 1
  const circleSize = 3
+
+
 
  // Voer de functies in deze volgorde uit
  setupMap()
@@ -56,12 +66,19 @@ GROUP BY ?place ?placeName ?type ?imageLink ?lat ?long
  plotLocations()
 
  function setupMap() {
-   svg
+   g
    // nieuw DOM-element aanmaken in svg: path
      .append('path')
      .attr('class', 'sphere')
      // Het d-attribuut defineerd het pad wat getekend gaat worden
      .attr('d', pathGenerator({ type: 'Sphere' }));
+
+   svg.call(zoom()
+     .on('zoom', () => {
+       g.attr('transform', d3.event.transform);
+     })
+   );
+
  }
 
  function drawMap() {
@@ -72,8 +89,8 @@ GROUP BY ?place ?placeName ?type ?imageLink ?lat ?long
        // feature: topoJson omzetten naar geoJson met de NPM package: topoJson .feature
        const countries = feature(data, data.objects.countries);
        // dataJoin opzetten (data en html connecten)
-       const paths = svg
-         // Er zijn data-elementen maar geen html-elementen. Daarom selecteer je alles
+       g
+       // Er zijn data-elementen maar geen html-elementen. Daarom selecteer je alles
          .selectAll('path')
          // Geef met .data(data) een array met data aan
          .data(countries.features)
@@ -82,7 +99,11 @@ GROUP BY ?place ?placeName ?type ?imageLink ?lat ?long
          // Geef voor elk path een class country mee
          .attr('class', 'country')
          // Het d-attribuut defineerd het pad wat getekend gaat worden
-         .attr('d', d => pathGenerator(d));
+         .attr('d', d => pathGenerator(d))
+         // Tooltip
+         .append('title')
+         .text(d => console.log(d));
+
      });
  }
 
@@ -101,7 +122,7 @@ GROUP BY ?place ?placeName ?type ?imageLink ?lat ?long
        })
        console.log(results)
 
-       svg
+       g
        // dataJoin opzetten (data en html connecten)
        // Er zijn data-elementen maar geen html-elementen. Daarom selecteer je alles
          .selectAll('circle')
@@ -132,19 +153,3 @@ GROUP BY ?place ?placeName ?type ?imageLink ?lat ?long
      })
 
  }
- /* Can't get the rotation to actually render */
- rotateMap([-20, -90])
-
- function rotateMap(degrees) {
-
-   var t = d3.timer(function(elapsed) {
-     console.log("rotating")
-     if (elapsed > 1000) t.stop();
-
-     projection.rotate([elapsed, elapsed]);
-     plotLocations()
-   }, 2000);
- }
-
-
- ;

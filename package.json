@@ -4,7 +4,9 @@
   "description": "frontend-data",
   "main": "index.js",
   "dependencies": {
-    "d3": "^5.14.1"
+    "d3": "^5.14.1",
+    "d3-geo": "^1.11.9",
+    "d3-zoom": "^1.8.3"
   },
   "devDependencies": {
     "parcel-bundler": "^1.12.4"
