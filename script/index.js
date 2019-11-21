@@ -4,29 +4,35 @@
 
  // SPARQL Sieraden
  const query = `PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX dc: <http://purl.org/dc/elements/1.1/>
-PREFIX dct: <http://purl.org/dc/terms/>
-PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-PREFIX edm: <http://www.europeana.eu/schemas/edm/>
-PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-PREFIX hdlh: <https://hdl.handle.net/20.500.11840/termmaster>
-PREFIX wgs84: <http://www.w3.org/2003/01/geo/wgs84_pos#>
-PREFIX geo: <http://www.opengis.net/ont/geosparql#>
-PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-PREFIX gn: <http://www.geonames.org/ontology#>
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-SELECT (SAMPLE(?cho) AS ?choSample) ?place ?placeName ?type ?imageLink ?lat ?long WHERE {
-    <https://hdl.handle.net/20.500.11840/termmaster13201> skos:narrower* ?type .
-    ?type skos:prefLabel ?typeName .
-    ?cho dct:spatial ?place ;
-        edm:object ?type ;
-       edm:isShownBy ?imageLink .
-    ?place skos:exactMatch/wgs84:lat ?lat .
-    ?place skos:exactMatch/wgs84:long ?long .
-}
-GROUP BY ?place ?placeName ?type ?imageLink ?lat ?long
+ PREFIX dc: <http://purl.org/dc/elements/1.1/>
+ PREFIX dct: <http://purl.org/dc/terms/>
+ PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+ PREFIX edm: <http://www.europeana.eu/schemas/edm/>
+ PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+ PREFIX hdlh: <https://hdl.handle.net/20.500.11840/termmaster>
+ PREFIX wgs84: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+ PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+ PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+ PREFIX gn: <http://www.geonames.org/ontology#>
+ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+ SELECT (SAMPLE(?cho) AS ?choSample) ?place ?placeName ?type ?imageLink ?lat ?long WHERE {
+    # Highlands
+   <https://hdl.handle.net/20.500.11840/termmaster6846> skos:narrower* ?place .
+     ?place skos:prefLabel ?placeName .
+   # Alle Objecten
+     <https://hdl.handle.net/20.500.11840/termmaster15122> skos:narrower* ?type .
+     ?type skos:prefLabel ?typeName .
+     ?cho dct:spatial ?place ;
+         edm:object ?type ;
+        edm:isShownBy ?imageLink .
+     ?place skos:exactMatch/wgs84:lat ?lat .
+     ?place skos:exactMatch/wgs84:long ?long .
+ }
+ GROUP BY ?place ?placeName ?type ?imageLink ?lat ?long
 `
+ const imageObject = document.querySelector('#object');
+ const tooltip = document.querySelector('.tooltip');
  const endpoint = "https://api.data.netwerkdigitaalerfgoed.nl/datasets/ivo/NMVW/services/NMVW-28/sparql";
  const width = 900;
  const height = 500;
@@ -53,7 +59,7 @@ GROUP BY ?place ?placeName ?type ?imageLink ?lat ?long
  const pathGenerator = geoPath().projection(projection);
  // svg centreren. Bron: https://bl.ocks.org/mbostock/4136647
  const circleDelay = 1
- const circleSize = 3
+ const circleSize = 1
 
  // Voer de functies in deze volgorde uit
  setupMap()
@@ -97,12 +103,6 @@ GROUP BY ?place ?placeName ?type ?imageLink ?lat ?long
      });
  }
 
- var tooltip = d3.select("body").append("div")
-   .attr("class", "tooltip")
-   .style('opacity', 0)
-   .style('position', 'absolute')
-   .style('padding', '0 10px');
-
  function plotLocations() {
    // Fetch geeft toegang tot het json file
    // Pak het endpoint en de query van de data uit SPARQL
@@ -132,11 +132,7 @@ GROUP BY ?place ?placeName ?type ?imageLink ?lat ?long
 
        // Hover en krijg een tooltip et imageLink
        .on('mouseover', function(d) {
-         svg.selectAll('text')
-           .data(results)
-           .enter()
-           .append('title')
-           .text(d => d.imageLink)
+         imageObject.src = d.imageLink;
        })
 
        // Bepaal de plaats van de circle op de kaart met cx en cy. 
@@ -147,8 +143,11 @@ GROUP BY ?place ?placeName ?type ?imageLink ?lat ?long
          .attr('cy', function(d) {
            return projection([d.long, d.lat])[1]
          })
-         // r geeft de grootte aan van de circles
-         .attr('r', '0px')
+
+       // r geeft de grootte aan van de circles
+       .attr('r', '0px')
+
+
 
        // Animeer de data met transition
        .transition()
@@ -157,5 +156,14 @@ GROUP BY ?place ?placeName ?type ?imageLink ?lat ?long
          .duration(50)
          .ease(d3.easeBounce)
          .attr('r', circleSize + 'px')
+
+
+       g.selectAll('title')
+         .data(results)
+         .enter()
+         .append('div')
+         .append('img')
+         .attr("class", "tooltip")
+         .attr('src', d.imageLink)
      })
  }

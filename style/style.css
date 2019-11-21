@@ -2,25 +2,29 @@ body {
   margin: 0em;
   overflow: hidden;
   background-color: #cfe5e3;
+  background-image: url("/style/sea-02-02.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .sphere {
-  fill: #cfe5e3;
+  fill: none;
 }
 
 .country {
-  fill: #ffffff;
+  fill: #162a2d;
   stroke: #cfe5e3;
   stroke-opacity: 0.4;
 }
 
 svg {
   margin: 2em auto;
-  background-color: #cfe5e3;
-  display: block;
   text-align: center;
   max-width: 50em;
-  ;
+  display: block;
+  position: relative;
+  width: 100%;
 }
 
 h1 {
@@ -28,7 +32,7 @@ h1 {
   font-size: 1.2em;
   color: #ffffff;
   text-transform: uppercase;
-  background-color: #ea4e55;
+  background-color: #162a2d;
   padding: 1em;
   margin: .5em;
   display: inline-block;
@@ -61,10 +65,24 @@ h1 {
 }
 
 circle {
-  fill: #ea4e55;
+  fill: #ffffff;
   opacity: .2;
 }
 
 circle:hover {
   fill: yellow;
+}
+
+#object {
+  display: inline-block;
+  width: 8em;
+  margin: 0 auto;
+  text-align: center;
+  position: absolute;
+  right: 1em;
+  bottom: 5em;
+}
+
+div {
+  display: inline;
 }
