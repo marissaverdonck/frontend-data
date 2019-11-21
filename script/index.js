@@ -28,20 +28,17 @@ SELECT (SAMPLE(?cho) AS ?choSample) ?place ?placeName ?type ?imageLink ?lat ?lon
 GROUP BY ?place ?placeName ?type ?imageLink ?lat ?long
 `
  const endpoint = "https://api.data.netwerkdigitaalerfgoed.nl/datasets/ivo/NMVW/services/NMVW-28/sparql";
-
- // Omdat npm en d3 geinstaleerd is kan hier alles uit gehaald worden ipv import
+ const width = 900;
+ const height = 500;
+ const svg = d3.select('svg')
+   .attr("viewBox", "0 0 " + width + " " + height)
+   // Omdat npm en d3 geinstaleerd is kan hier alles uit gehaald worden ipv import
  const json = d3.json;
  // topoJson omzetten naar geoJson met de NPM package: topoJson .feature
  const feature = topojson.feature;
  // geoPath zet data om naar een svg-string
  const geoPath = d3.geoPath;
  // geoEquirectangular is een projectie
-
- const width = 900;
- const height = 500;
- const svg = d3.select('svg')
-   .attr("viewBox", "0 0 " + width + " " + height)
-
  const geoConicEqualArea = d3.geoConicEqualArea;
  const geoNaturalEarth1 = d3.geoNaturalEarth1;
  const geoOrthographic = d3.geoOrthographic;
@@ -57,8 +54,6 @@ GROUP BY ?place ?placeName ?type ?imageLink ?lat ?long
  // svg centreren. Bron: https://bl.ocks.org/mbostock/4136647
  const circleDelay = 1
  const circleSize = 3
-
-
 
  // Voer de functies in deze volgorde uit
  setupMap()
@@ -78,7 +73,6 @@ GROUP BY ?place ?placeName ?type ?imageLink ?lat ?long
        g.attr('transform', d3.event.transform);
      })
    );
-
  }
 
  function drawMap() {
@@ -100,12 +94,14 @@ GROUP BY ?place ?placeName ?type ?imageLink ?lat ?long
          .attr('class', 'country')
          // Het d-attribuut defineerd het pad wat getekend gaat worden
          .attr('d', d => pathGenerator(d))
-         // Tooltip
-         .append('title')
-         .text(d => console.log(d));
-
      });
  }
+
+ var tooltip = d3.select("body").append("div")
+   .attr("class", "tooltip")
+   .style('opacity', 0)
+   .style('position', 'absolute')
+   .style('padding', '0 10px');
 
  function plotLocations() {
    // Fetch geeft toegang tot het json file
@@ -119,6 +115,7 @@ GROUP BY ?place ?placeName ?type ?imageLink ?lat ?long
        results.forEach(result => {
          result.lat = Number(result.lat.value)
          result.long = Number(result.long.value)
+         result.imageLink = String(result.imageLink.value)
        })
        console.log(results)
 
@@ -132,9 +129,19 @@ GROUP BY ?place ?placeName ?type ?imageLink ?lat ?long
          .append('circle')
          // Geef voor elk path een class country mee
          .attr('class', 'circles')
-         // Bepaal de plaats van de circle op de kaart met cx en cy. 
-         // Het d-attribuut defineerd het pad wat getekend gaat worden
-         .attr('cx', function(d) {
+
+       // Hover en krijg een tooltip et imageLink
+       .on('mouseover', function(d) {
+         svg.selectAll('text')
+           .data(results)
+           .enter()
+           .append('title')
+           .text(d => d.imageLink)
+       })
+
+       // Bepaal de plaats van de circle op de kaart met cx en cy. 
+       // Het d-attribuut defineerd het pad wat getekend gaat worden
+       .attr('cx', function(d) {
            return projection([d.long, d.lat])[0]
          })
          .attr('cy', function(d) {
@@ -147,9 +154,8 @@ GROUP BY ?place ?placeName ?type ?imageLink ?lat ?long
        .transition()
          // voor elk element overgangsvertraging instellen. d=datum, i=index.
          .delay(function(d, i) { return i * circleDelay; })
-         .duration(500)
+         .duration(50)
          .ease(d3.easeBounce)
          .attr('r', circleSize + 'px')
      })
-
  }

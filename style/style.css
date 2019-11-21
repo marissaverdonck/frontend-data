@@ -65,6 +65,6 @@ circle {
   opacity: .2;
 }
 
-.country:hover {
-  fill: red;
+circle:hover {
+  fill: yellow;
 }
