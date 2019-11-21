@@ -32,7 +32,8 @@
  GROUP BY ?place ?placeName ?type ?imageLink ?lat ?long
 `
  const imageObject = document.querySelector('#object');
- const tooltip = document.querySelector('.tooltip');
+
+
  const endpoint = "https://api.data.netwerkdigitaalerfgoed.nl/datasets/ivo/NMVW/services/NMVW-28/sparql";
  const width = 900;
  const height = 500;
@@ -60,6 +61,12 @@
  // svg centreren. Bron: https://bl.ocks.org/mbostock/4136647
  const circleDelay = 1
  const circleSize = 1
+
+ var myTool = d3.select("body")
+   .append("div")
+   .attr("class", "mytooltip")
+
+
 
  // Voer de functies in deze volgorde uit
  setupMap()
@@ -132,8 +139,19 @@
 
        // Hover en krijg een tooltip et imageLink
        .on('mouseover', function(d) {
+         myTool
+           .html(
+             "<div id='thumbnail'><span></span><img src='" + d.imageLink + "' /></div>")
+           .style("left", (d3.event.pageX - 113) + "px")
+           .style("top", (d3.event.pageY - 230) + "px")
+
+
+
          imageObject.src = d.imageLink;
        })
+
+
+
 
        // Bepaal de plaats van de circle op de kaart met cx en cy. 
        // Het d-attribuut defineerd het pad wat getekend gaat worden
@@ -158,12 +176,12 @@
          .attr('r', circleSize + 'px')
 
 
-       g.selectAll('title')
-         .data(results)
-         .enter()
-         .append('div')
-         .append('img')
-         .attr("class", "tooltip")
-         .attr('src', d.imageLink)
+       //  g.selectAll('title')
+       //    .data(results)
+       //    .enter()
+       //    .append('div')
+       //    .append('img')
+       //    .attr("class", "tooltip")
+       //    .attr('src', d.imageLink)
      })
  }
