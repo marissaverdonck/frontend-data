@@ -31,8 +31,6 @@
  }
  GROUP BY ?place ?placeName ?type ?imageLink ?lat ?long
 `
- const imageObject = document.querySelector('#object');
-
 
  const endpoint = "https://api.data.netwerkdigitaalerfgoed.nl/datasets/ivo/NMVW/services/NMVW-28/sparql";
  const width = 900;
@@ -138,16 +136,13 @@
          .attr('class', 'circles')
 
        // Hover en krijg een tooltip et imageLink
+       //Bron: https://github.com/Mariacristina88/D3.js-Tooltip
        .on('mouseover', function(d) {
          myTool
            .html(
              "<div id='thumbnail'><span></span><img src='" + d.imageLink + "' /></div>")
            .style("left", (d3.event.pageX - 113) + "px")
            .style("top", (d3.event.pageY - 230) + "px")
-
-
-
-         imageObject.src = d.imageLink;
        })
 
 
