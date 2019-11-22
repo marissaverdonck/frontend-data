@@ -1,8 +1,15 @@
+h1,
+h2,
+h3,
+p,
+a {
+  font-family: Montserrat;
+}
+
 body {
   margin: 0em;
-  overflow: hidden;
   background-color: #162a2d;
-  background-image: url("/style/sea-02-02.png");
+  background-image: url("/style/sea-02-02-02.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -13,7 +20,7 @@ body {
 }
 
 .country {
-  fill: #162a2d;
+  fill: #101f21;
   stroke: #cfe5e3;
   stroke-opacity: 0.4;
 }
@@ -32,36 +39,10 @@ h1 {
   font-size: 1.2em;
   color: #ffffff;
   text-transform: uppercase;
-  background-color: #162a2d;
+  background-color: #101f21;
   padding: 1em;
   margin: .5em;
   display: inline-block;
-}
-
-#buttons a button {
-  font-family: Montserrat;
-  background-color: #ffffff;
-  /* Green */
-  border: none;
-  color: #ea4e55;
-  font-weight: bold;
-  font-size: 1em;
-  padding: .8em;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  margin: 0em .5em 0em 0em;
-}
-
-#buttons {
-  display: block;
-  justify-content: center;
-  text-align: center;
-}
-
-#buttons a button.select {
-  background-color: #ea4e55;
-  color: #ffffff;
 }
 
 circle {
@@ -90,7 +71,7 @@ div {
 .mytooltip {
   position: absolute;
   text-align: center;
-  width: 200px;
+  width: 9em;
   height: auto;
   background-color: #EDE3D1;
   border-radius: 10px;
@@ -116,7 +97,7 @@ div {
 .mytooltip span {
   display: block;
   text-align: center;
-  width: 200px;
+  width: 9em;
   height: auto;
   margin: 5px auto;
 }
@@ -131,4 +112,56 @@ div {
 
 #thumbnail img {
   width: 8em;
+}
+
+.mytooltip {}
+
+#buttons {
+  display: flex;
+  justify-content: space-evenly;
+  text-align: center;
+  overflow-x: scroll;
+  display: flex;
+  justify-content: left;
+}
+
+#buttons img {
+  width: 14em;
+  border-color: #ffffff;
+  border-style: solid;
+  border-width: .2em;
+  margin: 2em;
+}
+
+#buttons img:hover {
+  border-width: 1em;
+}
+
+#information {
+  background-color: #101f21;
+}
+
+#information h2 {
+  color: #ffffff;
+  display: block;
+  text-align: center;
+  padding: 1.5em 0 1em 0;
+  text-transform: uppercase;
+}
+
+#information div {
+  display: grid;
+  grid-template-columns: 33% 33% 33%;
+}
+
+#information div p {
+  color: #ffffff;
+  font-weight: 100;
+  margin: 1em;
+}
+
+#information div h3 {
+  color: #ffffff;
+  font-weight: 100;
+  margin: 1em;
 }

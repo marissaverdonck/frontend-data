@@ -1,39 +1,98 @@
  // Wereldkaart maken, bron: https://www.youtube.com/watch?v=Qw6uAg3EO64
  // Mapprojections: https://github.com/d3/d3-geo-projection
  // Datapunten op kaart, bron: https://beta.vizhub.com/Razpudding/6b3c5d10edba4c86babf4b6bc204c5f0
-
- // SPARQL Sieraden
- const query = `PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
- PREFIX dc: <http://purl.org/dc/elements/1.1/>
- PREFIX dct: <http://purl.org/dc/terms/>
- PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
- PREFIX edm: <http://www.europeana.eu/schemas/edm/>
- PREFIX foaf: <http://xmlns.com/foaf/0.1/>
- PREFIX hdlh: <https://hdl.handle.net/20.500.11840/termmaster>
- PREFIX wgs84: <http://www.w3.org/2003/01/geo/wgs84_pos#>
- PREFIX geo: <http://www.opengis.net/ont/geosparql#>
- PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
- PREFIX gn: <http://www.geonames.org/ontology#>
- PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
- PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
- SELECT (SAMPLE(?cho) AS ?choSample) ?place ?placeName ?type ?imageLink ?lat ?long WHERE {
-    # Highlands
-   <https://hdl.handle.net/20.500.11840/termmaster6846> skos:narrower* ?place .
-     ?place skos:prefLabel ?placeName .
-   # Alle Objecten
-     <https://hdl.handle.net/20.500.11840/termmaster15122> skos:narrower* ?type .
-     ?type skos:prefLabel ?typeName .
-     ?cho dct:spatial ?place ;
-         edm:object ?type ;
-        edm:isShownBy ?imageLink .
-     ?place skos:exactMatch/wgs84:lat ?lat .
-     ?place skos:exactMatch/wgs84:long ?long .
+ const queries = {
+   querygoroka: `
+   PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+   PREFIX dc: <http://purl.org/dc/elements/1.1/>
+   PREFIX dct: <http://purl.org/dc/terms/>
+   PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+   PREFIX edm: <http://www.europeana.eu/schemas/edm/>
+   PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+   PREFIX hdlh: <https://hdl.handle.net/20.500.11840/termmaster>
+   PREFIX wgs84: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+   PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+   PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+   PREFIX gn: <http://www.geonames.org/ontology#>
+   PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+   PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+   SELECT (SAMPLE(?cho) AS ?choSample) ?place ?placeName ?type ?imageLink ?lat ?long WHERE {
+       # Goroka - Tehuantepec
+     <https://hdl.handle.net/20.500.11840/termmaster6846> skos:narrower* ?place .
+       ?place skos:prefLabel ?placeName .
+     # Alle Objecten
+       <https://hdl.handle.net/20.500.11840/termmaster15122> skos:narrower* ?type .
+       ?type skos:prefLabel ?typeName .
+       ?cho dct:spatial ?place ;
+           edm:object ?type ;
+           edm:isShownBy ?imageLink .
+       ?place skos:exactMatch/wgs84:lat ?lat .
+       ?place skos:exactMatch/wgs84:long ?long .
+   }
+   GROUP BY ?place ?placeName ?type ?imageLink ?lat ?long
+  `,
+   querydrokpa: `
+   PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+   PREFIX dc: <http://purl.org/dc/elements/1.1/>
+   PREFIX dct: <http://purl.org/dc/terms/>
+   PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+   PREFIX edm: <http://www.europeana.eu/schemas/edm/>
+   PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+   PREFIX hdlh: <https://hdl.handle.net/20.500.11840/termmaster>
+   PREFIX wgs84: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+   PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+   PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+   PREFIX gn: <http://www.geonames.org/ontology#>
+   PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+   PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+   SELECT (SAMPLE(?cho) AS ?choSample) ?place ?placeName ?type ?imageLink ?lat ?long WHERE {
+      # Drokpa - Ladakh
+     <https://hdl.handle.net/20.500.11840/termmaster7988> skos:narrower* ?place .
+       ?place skos:prefLabel ?placeName .
+     # Alle Objecten
+       <https://hdl.handle.net/20.500.11840/termmaster15122> skos:narrower* ?type .
+       ?type skos:prefLabel ?typeName .
+       ?cho dct:spatial ?place ;
+           edm:object ?type ;
+          edm:isShownBy ?imageLink .
+       ?place skos:exactMatch/wgs84:lat ?lat .
+       ?place skos:exactMatch/wgs84:long ?long .
+   }
+   GROUP BY ?place ?placeName ?type ?imageLink ?lat ?long
+   `,
+   queryzapoteca: `
+   PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+   PREFIX dc: <http://purl.org/dc/elements/1.1/>
+   PREFIX dct: <http://purl.org/dc/terms/>
+   PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+   PREFIX edm: <http://www.europeana.eu/schemas/edm/>
+   PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+   PREFIX hdlh: <https://hdl.handle.net/20.500.11840/termmaster>
+   PREFIX wgs84: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+   PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+   PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+   PREFIX gn: <http://www.geonames.org/ontology#>
+   PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+   PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+   SELECT (SAMPLE(?cho) AS ?choSample) ?place ?placeName ?type ?imageLink ?lat ?long WHERE {
+      # Zapoteca - Tehuantepec
+     <https://hdl.handle.net/20.500.11840/termmaster6182> skos:narrower* ?place .
+       ?place skos:prefLabel ?placeName .
+     # Alle Objecten
+       <https://hdl.handle.net/20.500.11840/termmaster15122> skos:narrower* ?type .
+       ?type skos:prefLabel ?typeName .
+       ?cho dct:spatial ?place ;
+           edm:object ?type ;
+          edm:isShownBy ?imageLink .
+       ?place skos:exactMatch/wgs84:lat ?lat .
+       ?place skos:exactMatch/wgs84:long ?long .
+   }
+   GROUP BY ?place ?placeName ?type ?imageLink ?lat ?long
+   `
  }
- GROUP BY ?place ?placeName ?type ?imageLink ?lat ?long
-`
 
  const endpoint = "https://api.data.netwerkdigitaalerfgoed.nl/datasets/ivo/NMVW/services/NMVW-28/sparql";
- const width = 900;
+ const width = 1000;
  const height = 500;
  const svg = d3.select('svg')
    .attr("viewBox", "0 0 " + width + " " + height)
@@ -54,22 +113,20 @@
  const g = svg.append('g');
  //geoNaturalEarth1()
  // zet de svg-string om naar de projectie
-
  const pathGenerator = geoPath().projection(projection);
  // svg centreren. Bron: https://bl.ocks.org/mbostock/4136647
  const circleDelay = 1
  const circleSize = 1
+ const buttons = document.getElementById("buttons")
 
  var myTool = d3.select("body")
    .append("div")
    .attr("class", "mytooltip")
 
-
-
  // Voer de functies in deze volgorde uit
  setupMap()
  drawMap()
- plotLocations()
+ showClickedQuery()
 
  function setupMap() {
    g
@@ -108,11 +165,24 @@
      });
  }
 
- function plotLocations() {
+ function showClickedQuery() {
+
+   //Geeft de id aan van de aangeklikte foto
+   buttons
+     .addEventListener('click', goroka => {
+       activeId = goroka.target.id
+       var selectedQuery = String("query" + activeId)
+       console.log(selectedQuery)
+       plotLocations(queries[selectedQuery])
+         //selectedQuery moet een string zijn!
+     })
+ }
+
+ function plotLocations(selectedQuery) {
    // Fetch geeft toegang tot het json file
    // Pak het endpoint en de query van de data uit SPARQL
    // encodeURI() encodes the Uniform Resource Identifier (URI) 
-   fetch(endpoint + "?query=" + encodeURIComponent(query) + "&format=json")
+   fetch(endpoint + "?query=" + encodeURIComponent(selectedQuery) + "&format=json")
      .then(data => data.json())
      .then(json => json.results.bindings)
      .then(results => {
@@ -122,7 +192,6 @@
          result.long = Number(result.long.value)
          result.imageLink = String(result.imageLink.value)
        })
-       console.log(results)
 
        g
        // dataJoin opzetten (data en html connecten)
@@ -131,7 +200,8 @@
          // Geef met .data(data) een array met data aan
          .data(results)
          .enter()
-         .append('circle')
+
+       .append('circle')
          // Geef voor elk path een class country mee
          .attr('class', 'circles')
 
@@ -145,9 +215,6 @@
            .style("top", (d3.event.pageY - 230) + "px")
        })
 
-
-
-
        // Bepaal de plaats van de circle op de kaart met cx en cy. 
        // Het d-attribuut defineerd het pad wat getekend gaat worden
        .attr('cx', function(d) {
@@ -156,11 +223,8 @@
          .attr('cy', function(d) {
            return projection([d.long, d.lat])[1]
          })
-
-       // r geeft de grootte aan van de circles
-       .attr('r', '0px')
-
-
+         // r geeft de grootte aan van de circles
+         .attr('r', '0px')
 
        // Animeer de data met transition
        .transition()
@@ -169,14 +233,5 @@
          .duration(50)
          .ease(d3.easeBounce)
          .attr('r', circleSize + 'px')
-
-
-       //  g.selectAll('title')
-       //    .data(results)
-       //    .enter()
-       //    .append('div')
-       //    .append('img')
-       //    .attr("class", "tooltip")
-       //    .attr('src', d.imageLink)
      })
  }
