@@ -118,7 +118,6 @@
  const circleDelay = 1
  const circleSize = 1
  const buttons = document.getElementById("buttons")
-
  var myTool = d3.select("body")
    .append("div")
    .attr("class", "mytooltip")
@@ -166,7 +165,6 @@
  }
 
  function showClickedQuery() {
-
    //Geeft de id aan van de aangeklikte foto
    buttons
      .addEventListener('click', goroka => {
@@ -174,7 +172,7 @@
        var selectedQuery = String("query" + activeId)
        console.log(selectedQuery)
        plotLocations(queries[selectedQuery])
-         //selectedQuery moet een string zijn!
+       remove()
      })
  }
 
@@ -200,8 +198,7 @@
          // Geef met .data(data) een array met data aan
          .data(results)
          .enter()
-
-       .append('circle')
+         .append('circle')
          // Geef voor elk path een class country mee
          .attr('class', 'circles')
 
@@ -234,4 +231,10 @@
          .ease(d3.easeBounce)
          .attr('r', circleSize + 'px')
      })
+ }
+
+ function remove() {
+   svg
+     .selectAll('circle')
+     .remove()
  }

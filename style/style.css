@@ -131,6 +131,7 @@ div {
   border-style: solid;
   border-width: .2em;
   margin: 2em;
+  height: 18em;
 }
 
 #buttons img:hover {
