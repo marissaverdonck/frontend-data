@@ -9,7 +9,7 @@ a {
 body {
   margin: 0em;
   background-color: #162a2d;
-  background-image: url("/style/sea-02-02-02.png");
+  background-image: url("../style/sea-02-02-02.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

@@ -118,11 +118,11 @@
  const circleDelay = 1
  const circleSize = 1
  const buttons = document.getElementById("buttons")
+ const dataPoint = document.getElementsByClassName("circles")
  var myTool = d3.select("body")
    .append("div")
    .attr("class", "mytooltip")
-
- // Voer de functies in deze volgorde uit
+   // Voer de functies in deze volgorde uit
  setupMap()
  drawMap()
  showClickedQuery()
@@ -171,9 +171,15 @@
        activeId = goroka.target.id
        var selectedQuery = String("query" + activeId)
        console.log(selectedQuery)
-       plotLocations(queries[selectedQuery])
        remove()
+       plotLocations(queries[selectedQuery])
      })
+ }
+
+ function remove() {
+   svg
+     .selectAll('circle')
+     .remove()
  }
 
  function plotLocations(selectedQuery) {
@@ -215,7 +221,7 @@
        // Bepaal de plaats van de circle op de kaart met cx en cy. 
        // Het d-attribuut defineerd het pad wat getekend gaat worden
        .attr('cx', function(d) {
-           return projection([d.long, d.lat])[0]
+           return projection([d.long, d.lat])[0];
          })
          .attr('cy', function(d) {
            return projection([d.long, d.lat])[1]
@@ -230,11 +236,19 @@
          .duration(50)
          .ease(d3.easeBounce)
          .attr('r', circleSize + 'px')
+
+       // Geef de locatie door van het geklikte volk
+       var x = dataPoint[0].getAttribute('cx')
+       var y = dataPoint[0].getAttribute('cy')
+       console.log(x + y)
+       clicked(x, y)
      })
  }
 
- function remove() {
-   svg
-     .selectAll('circle')
-     .remove()
+ function clicked(x, y) {
+   const k = 9;
+   g.transition()
+     .duration(750)
+     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
+     .style("stroke-width", 1.5 / k + "px");
  }
