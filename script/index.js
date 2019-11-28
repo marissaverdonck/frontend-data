@@ -116,9 +116,11 @@
  const pathGenerator = geoPath().projection(projection);
  // svg centreren. Bron: https://bl.ocks.org/mbostock/4136647
  const circleDelay = 1
- const circleSize = 1
+ const circleSize = .5
  const buttons = document.getElementById("buttons")
  const dataPoint = document.getElementsByClassName("circles")
+ const hoverTip = document.querySelector(".hide")
+ const toolTip = document.querySelector("thumbnail")
  var myTool = d3.select("body")
    .append("div")
    .attr("class", "mytooltip")
@@ -163,6 +165,8 @@
      });
  }
 
+
+
  function showClickedQuery() {
    //Geeft de id aan van de aangeklikte foto
    buttons
@@ -172,6 +176,7 @@
        console.log(selectedQuery)
        remove()
        plotLocations(queries[selectedQuery])
+       hoverTip.classList = ('show')
      })
  }
 
@@ -210,12 +215,20 @@
        // Hover en krijg een tooltip et imageLink
        //Bron: https://github.com/Mariacristina88/D3.js-Tooltip
        .on('mouseover', function(d) {
-         myTool
-           .html(
-             "<div id='thumbnail'><span></span><img src='" + d.imageLink + "' /></div>")
-           .style("left", (d3.event.pageX - 113) + "px")
-           .style("top", (d3.event.pageY - 230) + "px")
-       })
+           myTool
+             .html(
+               "<div id='thumbnail'><span></span><img src='" + d.imageLink + "' /></div>")
+             .style("left", (d3.event.pageX - 113) + "px")
+             .style("top", (d3.event.pageY - 230) + "px")
+
+           var a = myTool._groups[0][0]
+           a.className = ("mytooltip")
+         })
+         .on('mouseout', function(d) {
+           var a = myTool._groups[0][0]
+           a.className = ("moveOut")
+         })
+
 
        // Bepaal de plaats van de circle op de kaart met cx en cy. 
        // Het d-attribuut defineerd het pad wat getekend gaat worden
@@ -244,56 +257,45 @@
 
 
 
-       var arrayUnique = [];
+       const arrayUnique = [];
 
        for (i = 0; i < dataPoint.length; i++) {
-         var random = Math.round(Math.random() * 4 - 2)
+         const random = (Math.random() * 4 - 2)
          console.log("random" + random)
-         var valueX = Number(dataPoint[i].getAttribute('cx'))
-         var valueY = Number(dataPoint[i].getAttribute('cy'))
-         var valueXY = valueX + "," + valueY;
+         const valueX = Number(dataPoint[i].getAttribute('cx'))
+         const valueY = Number(dataPoint[i].getAttribute('cy'))
+         const valueXY = valueX + "," + valueY;
 
          // Hetzelfde
          if (arrayUnique.includes(valueXY)) {
+           const newValueX = valueX + random
+           const newValueY = valueY + random
 
-           var newValueX = valueX + random
-           var newValueY = valueY + random
-
-
-           var een = function() {
+           const een = function() {
              dataPoint[i].setAttribute('cx', newValueX);
            }
-
-           var twee = function() {
+           const twee = function() {
              dataPoint[i].setAttribute('cy', newValueY);
            }
-
-           var drie = function() {
+           const drie = function() {
              dataPoint[i].setAttribute('cx', newValueX);
              dataPoint[i].setAttribute('cy', newValueY);
            }
-
-           var kopOfmunt = Math.floor(Math.random() * Math.floor(3))
+           const kopOfmunt = Math.floor(Math.random() * Math.floor(3))
            if (kopOfmunt == 1) { een() } else if (kopOfmunt == 2) { twee() } else { drie() }
 
+           const x = dataPoint[i].getAttribute('cx', newValueX)
+           const y = dataPoint[i].getAttribute('cy', newValueY)
 
-
-           var x = dataPoint[i].getAttribute('cx', newValueX)
-           var y = dataPoint[i].getAttribute('cy', newValueY)
-
-           var newXY = x + "," + y
-
+           const newXY = x + "," + y
            arrayUnique.push(newXY)
 
-           // Uniek
          } else {
            arrayUnique.push(valueXY)
          }
        }
 
        console.log("arrayUnique: " + arrayUnique)
-
-
      })
  }
 
@@ -303,4 +305,8 @@
      .duration(750)
      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
      .style("stroke-width", 1.5 / k + "px");
+
+
+
+
  }
