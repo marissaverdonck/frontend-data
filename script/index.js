@@ -241,30 +241,58 @@
        var y = dataPoint[0].getAttribute('cy')
        clicked(x, y)
 
-       var arrayEqual = [];
+
+
+
        var arrayUnique = [];
 
        for (i = 0; i < dataPoint.length; i++) {
-         // Hetzelfde
-         if (arrayUnique.includes(dataPoint[i].getAttribute('cx')) && (dataPoint[i].getAttribute('cy'))) {
-           var valueX = Number(dataPoint[i].getAttribute('cx'))
-           var valueY = Number(dataPoint[i].getAttribute('cy'))
-           var newValueX = (valueX + i * 0.5)
-           var newValueY = (valueY + i * 0.5)
-           var x = dataPoint[i].setAttribute('cx', newValueX)
-           var y = dataPoint[i].setAttribute('cy', newValueY)
+         var random = Math.round(Math.random() * 4 - 2)
+         console.log("random" + random)
+         var valueX = Number(dataPoint[i].getAttribute('cx'))
+         var valueY = Number(dataPoint[i].getAttribute('cy'))
+         var valueXY = valueX + "," + valueY;
 
-           arrayUnique.push(dataPoint[i].getAttribute('cx'))
-           arrayUnique.push(dataPoint[i].getAttribute('cx'))
+         // Hetzelfde
+         if (arrayUnique.includes(valueXY)) {
+
+           var newValueX = valueX + random
+           var newValueY = valueY + random
+
+
+           var een = function() {
+             dataPoint[i].setAttribute('cx', newValueX);
+           }
+
+           var twee = function() {
+             dataPoint[i].setAttribute('cy', newValueY);
+           }
+
+           var drie = function() {
+             dataPoint[i].setAttribute('cx', newValueX);
+             dataPoint[i].setAttribute('cy', newValueY);
+           }
+
+           var kopOfmunt = Math.floor(Math.random() * Math.floor(3))
+           if (kopOfmunt == 1) { een() } else if (kopOfmunt == 2) { twee() } else { drie() }
+
+
+
+           var x = dataPoint[i].getAttribute('cx', newValueX)
+           var y = dataPoint[i].getAttribute('cy', newValueY)
+
+           var newXY = x + "," + y
+
+           arrayUnique.push(newXY)
 
            // Uniek
          } else {
-           arrayUnique.push(dataPoint[i].getAttribute('cx'))
-           arrayUnique.push(dataPoint[i].getAttribute('cy'))
+           arrayUnique.push(valueXY)
          }
        }
 
-       console.log("nieuwe punten " + arrayUnique)
+       console.log("arrayUnique: " + arrayUnique)
+
 
      })
  }
