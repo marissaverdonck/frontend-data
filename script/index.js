@@ -243,17 +243,29 @@
 
        var arrayEqual = [];
        var arrayUnique = [];
+
        for (i = 0; i < dataPoint.length; i++) {
-         if (arrayUnique.includes(dataPoint[i].getAttribute('cx'))) {
-           console.log("bestaat al")
-           arrayEqual.push(dataPoint[i].getAttribute('cx'))
-         } else {
-           console.log("bestaat nog niet")
+         // Hetzelfde
+         if (arrayUnique.includes(dataPoint[i].getAttribute('cx')) && (dataPoint[i].getAttribute('cy'))) {
+           var valueX = Number(dataPoint[i].getAttribute('cx'))
+           var valueY = Number(dataPoint[i].getAttribute('cy'))
+           var newValueX = (valueX + i * 0.5)
+           var newValueY = (valueY + i * 0.5)
+           var x = dataPoint[i].setAttribute('cx', newValueX)
+           var y = dataPoint[i].setAttribute('cy', newValueY)
+
            arrayUnique.push(dataPoint[i].getAttribute('cx'))
+           arrayUnique.push(dataPoint[i].getAttribute('cx'))
+
+           // Uniek
+         } else {
+           arrayUnique.push(dataPoint[i].getAttribute('cx'))
+           arrayUnique.push(dataPoint[i].getAttribute('cy'))
          }
        }
-       console.log("zelfde punten " + arrayEqual)
+
        console.log("nieuwe punten " + arrayUnique)
+
      })
  }
 
