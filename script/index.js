@@ -134,7 +134,6 @@
      .attr('class', 'sphere')
      // Het d-attribuut defineerd het pad wat getekend gaat worden
      .attr('d', pathGenerator({ type: 'Sphere' }));
-
    svg.call(zoom()
      .on('zoom', () => {
        g.attr('transform', d3.event.transform);
@@ -197,9 +196,9 @@
          result.imageLink = String(result.imageLink.value)
        })
 
-       g
        // dataJoin opzetten (data en html connecten)
        // Er zijn data-elementen maar geen html-elementen. Daarom selecteer je alles
+       g
          .selectAll('circle')
          // Geef met .data(data) een array met data aan
          .data(results)
@@ -221,7 +220,7 @@
        // Bepaal de plaats van de circle op de kaart met cx en cy. 
        // Het d-attribuut defineerd het pad wat getekend gaat worden
        .attr('cx', function(d) {
-           return projection([d.long, d.lat])[0];
+           return projection([d.long, d.lat])[0]
          })
          .attr('cy', function(d) {
            return projection([d.long, d.lat])[1]
@@ -240,8 +239,21 @@
        // Geef de locatie door van het geklikte volk
        var x = dataPoint[0].getAttribute('cx')
        var y = dataPoint[0].getAttribute('cy')
-       console.log(x + y)
        clicked(x, y)
+
+       var arrayEqual = [];
+       var arrayUnique = [];
+       for (i = 0; i < dataPoint.length; i++) {
+         if (arrayUnique.includes(dataPoint[i].getAttribute('cx'))) {
+           console.log("bestaat al")
+           arrayEqual.push(dataPoint[i].getAttribute('cx'))
+         } else {
+           console.log("bestaat nog niet")
+           arrayUnique.push(dataPoint[i].getAttribute('cx'))
+         }
+       }
+       console.log("zelfde punten " + arrayEqual)
+       console.log("nieuwe punten " + arrayUnique)
      })
  }
 
