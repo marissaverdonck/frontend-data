@@ -16,20 +16,22 @@
    PREFIX gn: <http://www.geonames.org/ontology#>
    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-   SELECT (SAMPLE(?cho) AS ?choSample) ?place ?placeName ?type ?imageLink ?lat ?long WHERE {
+   SELECT (SAMPLE(?cho) AS ?choSample) ?place ?placeName ?type ?imageLink ?lat ?long ?altLabel ?title WHERE {
        # Goroka - Tehuantepec
      <https://hdl.handle.net/20.500.11840/termmaster6846> skos:narrower* ?place .
        ?place skos:prefLabel ?placeName .
      # Alle Objecten
        <https://hdl.handle.net/20.500.11840/termmaster15122> skos:narrower* ?type .
-       ?type skos:prefLabel ?typeName .
-       ?cho dct:spatial ?place ;
-           edm:object ?type ;
-           edm:isShownBy ?imageLink .
-       ?place skos:exactMatch/wgs84:lat ?lat .
-       ?place skos:exactMatch/wgs84:long ?long .
-   }
-   GROUP BY ?place ?placeName ?type ?imageLink ?lat ?long
+       ?type skos:prefLabel ?typeName ;
+       skos:prefLabel ?altLabel .
+ ?cho dct:spatial ?place ;
+     edm:object ?type ;
+     dc:title ?title ;
+    edm:isShownBy ?imageLink .
+ ?place skos:exactMatch/wgs84:lat ?lat .
+ ?place skos:exactMatch/wgs84:long ?long .
+}
+GROUP BY ?place ?placeName ?type ?altLabel ?imageLink ?lat ?long ?title
   `,
    querydrokpa: `
    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -45,20 +47,22 @@
    PREFIX gn: <http://www.geonames.org/ontology#>
    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-   SELECT (SAMPLE(?cho) AS ?choSample) ?place ?placeName ?type ?imageLink ?lat ?long WHERE {
+   SELECT (SAMPLE(?cho) AS ?choSample) ?place ?placeName ?type ?imageLink ?lat ?long ?altLabel ?title WHERE {
       # Drokpa - Ladakh
      <https://hdl.handle.net/20.500.11840/termmaster7988> skos:narrower* ?place .
        ?place skos:prefLabel ?placeName .
      # Alle Objecten
        <https://hdl.handle.net/20.500.11840/termmaster15122> skos:narrower* ?type .
-       ?type skos:prefLabel ?typeName .
-       ?cho dct:spatial ?place ;
-           edm:object ?type ;
-          edm:isShownBy ?imageLink .
-       ?place skos:exactMatch/wgs84:lat ?lat .
-       ?place skos:exactMatch/wgs84:long ?long .
-   }
-   GROUP BY ?place ?placeName ?type ?imageLink ?lat ?long
+       ?type skos:prefLabel ?typeName ;
+       skos:prefLabel ?altLabel .
+ ?cho dct:spatial ?place ;
+     edm:object ?type ;
+     dc:title ?title ;
+    edm:isShownBy ?imageLink .
+ ?place skos:exactMatch/wgs84:lat ?lat .
+ ?place skos:exactMatch/wgs84:long ?long .
+}
+GROUP BY ?place ?placeName ?type ?altLabel ?imageLink ?lat ?long ?title
    `,
    queryzapoteca: `
    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -74,20 +78,22 @@
    PREFIX gn: <http://www.geonames.org/ontology#>
    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-   SELECT (SAMPLE(?cho) AS ?choSample) ?place ?placeName ?type ?imageLink ?lat ?long WHERE {
+   SELECT (SAMPLE(?cho) AS ?choSample) ?place ?placeName ?type ?imageLink ?lat ?long ?altLabel ?title WHERE {
       # Zapoteca - Tehuantepec
      <https://hdl.handle.net/20.500.11840/termmaster6182> skos:narrower* ?place .
        ?place skos:prefLabel ?placeName .
      # Alle Objecten
        <https://hdl.handle.net/20.500.11840/termmaster15122> skos:narrower* ?type .
-       ?type skos:prefLabel ?typeName .
-       ?cho dct:spatial ?place ;
-           edm:object ?type ;
-          edm:isShownBy ?imageLink .
-       ?place skos:exactMatch/wgs84:lat ?lat .
-       ?place skos:exactMatch/wgs84:long ?long .
-   }
-   GROUP BY ?place ?placeName ?type ?imageLink ?lat ?long
+       ?type skos:prefLabel ?typeName ;
+          skos:prefLabel ?altLabel .
+    ?cho dct:spatial ?place ;
+        edm:object ?type ;
+        dc:title ?title ;
+       edm:isShownBy ?imageLink .
+    ?place skos:exactMatch/wgs84:lat ?lat .
+    ?place skos:exactMatch/wgs84:long ?long .
+}
+GROUP BY ?place ?placeName ?type ?altLabel ?imageLink ?lat ?long ?title
    `
  }
 
