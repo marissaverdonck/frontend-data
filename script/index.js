@@ -94,6 +94,69 @@ GROUP BY ?place ?placeName ?type ?altLabel ?imageLink ?lat ?long ?title
     ?place skos:exactMatch/wgs84:long ?long .
 }
 GROUP BY ?place ?placeName ?type ?altLabel ?imageLink ?lat ?long ?title
+   `,
+   querychukchi: `
+   PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+   PREFIX dc: <http://purl.org/dc/elements/1.1/>
+   PREFIX dct: <http://purl.org/dc/terms/>
+   PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+   PREFIX edm: <http://www.europeana.eu/schemas/edm/>
+   PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+   PREFIX hdlh: <https://hdl.handle.net/20.500.11840/termmaster>
+   PREFIX wgs84: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+   PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+   PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+   PREFIX gn: <http://www.geonames.org/ontology#>
+   PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+   PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+   SELECT (SAMPLE(?cho) AS ?choSample) ?place ?placeName ?type ?imageLink ?lat ?long ?altLabel ?title WHERE {
+      # Chukchi - Anadyr
+     <https://hdl.handle.net/20.500.11840/termmaster5913> skos:narrower* ?place .
+       ?place skos:prefLabel ?placeName .
+     # Alle Objecten
+       <https://hdl.handle.net/20.500.11840/termmaster15122> skos:narrower* ?type .
+       ?type skos:prefLabel ?typeName ;
+          skos:prefLabel ?altLabel .
+    ?cho dct:spatial ?place ;
+        edm:object ?type ;
+        dc:title ?title ;
+       edm:isShownBy ?imageLink .
+    ?place skos:exactMatch/wgs84:lat ?lat .
+    ?place skos:exactMatch/wgs84:long ?long .
+}
+GROUP BY ?place ?placeName ?type ?altLabel ?imageLink ?lat ?long ?title
+   `,
+
+   querymaasai: `
+   PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+   PREFIX dc: <http://purl.org/dc/elements/1.1/>
+   PREFIX dct: <http://purl.org/dc/terms/>
+   PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+   PREFIX edm: <http://www.europeana.eu/schemas/edm/>
+   PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+   PREFIX hdlh: <https://hdl.handle.net/20.500.11840/termmaster>
+   PREFIX wgs84: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+   PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+   PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+   PREFIX gn: <http://www.geonames.org/ontology#>
+   PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+   PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+   SELECT (SAMPLE(?cho) AS ?choSample) ?place ?placeName ?type ?imageLink ?lat ?long ?altLabel ?title WHERE {
+      # Maasai - Tanzania
+     <https://hdl.handle.net/20.500.11840/termmaster2162> skos:narrower* ?place .
+       ?place skos:prefLabel ?placeName .
+     # Alle Objecten
+       <https://hdl.handle.net/20.500.11840/termmaster15122> skos:narrower* ?type .
+       ?type skos:prefLabel ?typeName ;
+          skos:prefLabel ?altLabel .
+    ?cho dct:spatial ?place ;
+        edm:object ?type ;
+        dc:title ?title ;
+       edm:isShownBy ?imageLink .
+    ?place skos:exactMatch/wgs84:lat ?lat .
+    ?place skos:exactMatch/wgs84:long ?long .
+}
+GROUP BY ?place ?placeName ?type ?altLabel ?imageLink ?lat ?long ?title
    `
  }
 
@@ -124,6 +187,7 @@ GROUP BY ?place ?placeName ?type ?altLabel ?imageLink ?lat ?long ?title
  const circleDelay = 1
  const circleSize = .5
  const buttons = document.getElementById("buttons")
+ const volk = document.getElementById("volk")
  const dataPoint = document.getElementsByClassName("circles")
  const hoverTip = document.querySelector(".hide")
  const toolTip = document.querySelector("thumbnail")
@@ -179,8 +243,7 @@ GROUP BY ?place ?placeName ?type ?altLabel ?imageLink ?lat ?long ?title
      .addEventListener('click', goroka => {
        activeId = goroka.target.id
        const selectedQuery = String("query" + activeId)
-       console.log(selectedQuery)
-
+       remove()
        plotLocations(queries[selectedQuery])
        hoverTip.classList = ('show')
      })

@@ -63,6 +63,8 @@ h1 {
   margin: -2.5em .5em 2em auto;
   opacity: 100;
   font-size: .8em;
+  z-index: 100;
+  position: relative;
 }
 
 circle {
@@ -163,7 +165,8 @@ div {
 
 #information {
   background-color: #101f21;
-  margin: 0
+  margin: 0;
+  padding-bottom: 3em;
 }
 
 #information h2 {
@@ -179,17 +182,20 @@ div {
 #information div {
   display: grid;
   grid-template-columns: 33% 33% 33%;
+  max-width: 50em;
+  margin: 0 auto;
 }
 
 #information div p {
   color: #ffffff;
   font-weight: 100;
-  margin: 1em;
+  margin: 1.5em;
   font-size: .8em;
 }
 
 #information div h3 {
   color: #ffffff;
-  font-weight: 100;
+  font-weight: 300;
   margin: 1em;
+  font-style: italic
 }
