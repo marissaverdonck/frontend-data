@@ -32,7 +32,7 @@ svg {
   display: block;
   position: relative;
   width: 99%;
-  max-height: 22em;
+  max-height: 19em;
 }
 
 h1 {
@@ -100,8 +100,9 @@ div {
   z-index: 3;
 }
 
-.mouseOut {
-  opacity: 5;
+.moveOut {
+  display: none;
+  ;
 }
 
 .mytooltip:after {
@@ -169,7 +170,7 @@ div {
   color: #ffffff;
   display: block;
   text-align: center;
-  padding: 1em 0 1em 0;
+  padding: 1em 0 .5em 0;
   margin: 0;
   text-transform: uppercase;
   font-size: 1.3em;
@@ -184,6 +185,7 @@ div {
   color: #ffffff;
   font-weight: 100;
   margin: 1em;
+  font-size: .8em;
 }
 
 #information div h3 {
