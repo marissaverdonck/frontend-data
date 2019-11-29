@@ -178,9 +178,9 @@ GROUP BY ?place ?placeName ?type ?altLabel ?imageLink ?lat ?long ?title
    buttons
      .addEventListener('click', goroka => {
        activeId = goroka.target.id
-       var selectedQuery = String("query" + activeId)
+       const selectedQuery = String("query" + activeId)
        console.log(selectedQuery)
-       remove()
+
        plotLocations(queries[selectedQuery])
        hoverTip.classList = ('show')
      })
